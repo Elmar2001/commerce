@@ -1,0 +1,28 @@
+{% extends "auctions/layout.html" %}
+{% block title %}
+    Watchlist
+{% endblock %}
+
+{% block body %}
+
+    <h2 style="margin-bottom: 35px;">Watchlist:</h2>
+    {% for listing in listings %}
+        <img src="{{ listing.image }}" alt="List Image" height="80px" style="float: left; margin: 2px 15px; ">
+        <a href="/view/{{ listing.pk }}">Title: <strong>{{ listing.title }}</strong></a><br>
+        Category: <strong>{{ listing.category }}</strong><br>
+        Current Bid: <strong>${{ listing.current_bid }}</strong><br>
+
+        <form class="" action="/deletewatchlist/{{ listing.pk }}" method="post">
+            {% csrf_token %}
+            <button class="btn btn-primary" type="submit" name="Delete" style="background-color: red;">Delete From
+                Watchlist
+            </button>
+        </form>
+
+        <hr>
+
+    {% endfor %}
+    {% if not listings %}
+        <p>Watchlist is empty.</p>
+    {% endif %}
+{% endblock %}

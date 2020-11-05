@@ -1,0 +1,87 @@
+{% extends "auctions/layout.html" %}
+
+{% block title %}
+    Listing {{ listing.title }}
+{% endblock %}
+
+
+
+{% block body %}
+
+    {% if not listing.active %}
+        <div class="alert alert-primary">This listing is closed. Winner:
+            {{ listing.winner }}</div>
+
+    {% endif %}
+
+    {% if user.is_authenticated %}
+        <!-- Watchlist -->
+        <form class="" action="/addwatchlist/{{ listing.pk }}" method="post">
+            {% csrf_token %}
+            <input class="btn btn-primary" type="submit" name="" value="Add to Watchlist"
+                   style="background-color: green; margin: 10px;">
+        </form>
+
+        {% if listing.active %}
+            <form class="" action="/close/{{ listing.id }}" method="post">
+                {% csrf_token %}
+                <input class="btn btn-primary" type="submit" name="" value="Close Listing"
+                       style="background-color: #ff0000; margin: 10px;">
+            </form>
+        {% endif %}
+    {% endif %}
+
+    <!-- Listing -->
+    <img src="{{ listing.image }}" alt="Listing Image" height="300px">
+    <ul>
+        <li>Title: <strong>{{ listing.title }}</strong></li>
+        <li>Category: <strong>{{ listing.category }}</strong></li>
+        <li>Created by: <strong>{{ listing.seller }}</strong></li>
+        <li>Current Price: <strong>${{ listing.current_bid }}</strong></li>
+    </ul>
+    <hr>
+    <h4>Description:</h4><br>
+    <p>{{ listing.content }}</p>
+    <br>
+    <!-- Bids -->
+    {% if user.is_authenticated %}
+        <h4>Add your Bid: </h4>
+        <form class="" action="/view/{{ listing.pk }}" method="post">
+            {% csrf_token %}
+            <input type="text" name="bid" value="" placeholder="Bid">
+            <input class="btn btn-primary" type="submit" name="" value="Bid Now">
+        </form>
+    {% endif %}
+
+    <hr style="top: 15px">
+    {% if bids %}
+        <h4>Bids by other users: </h4>
+        {% for bid in bids %}
+            <p>{{ bid.user }} bids <strong>${{ bid.amount }}</strong>.</p>
+            <hr>
+        {% endfor %}
+    {% endif %}
+    <hr style="border: 5px">
+    <!-- Comments -->
+    <h4>Comments: </h4>
+    {% if comments %}
+        {% for comment in comments %}
+            <p><strong>{{ comment.user }}</strong> says:</p>
+            {{ comment.comment }}
+            <hr>
+        {% endfor %}
+    {% else %}
+        <p>Be the first to comment.</p>
+    {% endif %}
+    {% if user.is_authenticated %}
+        <h4>Comment:</h4>
+        <form class="" action="/comment/{{ listing.pk }}" method="post">
+            {% csrf_token %}
+            <textarea class="form-control" name="comment" rows="8" cols="80" style="margin: 10px"></textarea>
+            <input class="btn btn-primary" type="submit" name="" value="Post Comment" style="margin: 10px">
+        </form>
+    {% endif %}
+    <hr>
+
+{% endblock %}
+

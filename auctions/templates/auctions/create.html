@@ -1,0 +1,21 @@
+{% extends "auctions/layout.html" %}
+
+{% block title %}
+    Create new listing
+{% endblock %}
+
+
+{% block body %}
+    <form class="" method="post">
+        {% csrf_token %}
+        <input autofocus class="form-control" type="text" name="title" placeholder="Title" style="margin: 10px">
+        <input class="form-control" type="text" name="starting_bid" placeholder="Starting bid" style="margin: 10px">
+        <textarea class="form-control" name="content" rows="8" cols="80" placeholder="Description"
+                  style="margin: 10px"></textarea>
+        <input class="form-control" type="text" name="image" placeholder="Image Link" style="margin: 10px">
+        <input class="form-control" type="text" name="category" placeholder="Category (Optional)" style="margin: 10px">
+        <input class="btn btn-primary" type="submit" name="" value="Create" style="margin: 10px">
+    </form>
+
+
+{% endblock %}
